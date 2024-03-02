@@ -48,7 +48,19 @@ body {
   gap: 2.4rem;
   justify-content: center;
 }
-
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light); /* Color of the scrollbar handle */
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  cursor: grab;
+}
+webkit-scrollbar,
+.box::-webkit-scrollbar {
+  scroll-behavior: smooth;
+  width: 5px;
+  border-radius: 4px;
+}
 .box {
   width: 42rem;
   max-width: 42rem;
