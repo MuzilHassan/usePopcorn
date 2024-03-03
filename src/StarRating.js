@@ -35,7 +35,7 @@ const StarRating = ({
             key={i}
             onClick={() => {
               setRating(i + 1);
-              // onSetRating(i + 1);
+              onSetRating(i);
             }}
             full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
             onHoverIn={() => setTempRating(i + 1)}
