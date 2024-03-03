@@ -31,7 +31,7 @@ const tempWatchedData = [
     Year: "2010",
     Poster:
       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
+    Runtime: 148,
     imdbRating: 8.8,
     userRating: 10,
   },
@@ -41,7 +41,7 @@ const tempWatchedData = [
     Year: "1985",
     Poster:
       "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
+    Runtime: 116,
     imdbRating: 8.5,
     userRating: 9,
   },
@@ -51,7 +51,7 @@ const KEY = "65889ec0";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
@@ -63,6 +63,13 @@ export default function App() {
   const handleClose = () => {
     setSelectedId(null);
   };
+  const addToWatchd = (obj) => {
+    if (watched.some((item) => item.imdbID === obj.imdbID))
+      return setSelectedId(null);
+    setWatched((watched) => [...watched, obj]);
+    setSelectedId(null);
+  };
+
   const fetchMovies = async () => {
     try {
       setLoading(true);
@@ -114,7 +121,11 @@ export default function App() {
         </ListBox>
         <ListBox>
           {selectedId ? (
-            <MovieDetails id={selectedId} handleClose={handleClose} />
+            <MovieDetails
+              id={selectedId}
+              handleClose={handleClose}
+              addToWatchd={addToWatchd}
+            />
           ) : (
             <>
               <Summary watched={watched} />
@@ -193,7 +204,7 @@ function MovieList({ movies, setSelectedId }) {
     </ul>
   );
 }
-function Movie({ movie, setSelectedId, handleClose }) {
+function Movie({ movie, setSelectedId }) {
   return (
     <li onClick={() => setSelectedId(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
@@ -207,7 +218,7 @@ function Movie({ movie, setSelectedId, handleClose }) {
     </li>
   );
 }
-function MovieDetails({ id, handleClose }) {
+function MovieDetails({ id, handleClose, addToWatchd }) {
   const [details, setDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -217,7 +228,6 @@ function MovieDetails({ id, handleClose }) {
       const data = await res.json();
       setDetails(data);
       setIsLoading(false);
-      console.log(data);
     };
     getDetails();
   }, [id]);
@@ -254,6 +264,12 @@ function MovieDetails({ id, handleClose }) {
             </p>
             <p>Staring Actors : {details.Actors}</p>
             <p>Directors : {details.Director}</p>
+            <button
+              className="btn-add"
+              onClick={() => addToWatchd({ ...details, userRating: 4 })}
+            >
+              Add to WatchList
+            </button>
           </section>
         </>
       )}
@@ -284,9 +300,16 @@ function WatchedBox() {
 }
 */
 function Summary({ watched }) {
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
+  const avgImdbRating = average(
+    watched.map((movie) => movie.imdbRating)
+  ).toFixed(1);
+  //console.log(watched);
+  const avgUserRating = average(
+    watched.map((movie) => movie.userRating)
+  ).toFixed(1);
+  const avgRuntime = average(
+    watched.map((movie) => movie.Runtime.slice(0, -3))
+  ).toFixed(1);
   return (
     <div className="summary">
       <h2>Movies you watched</h2>
@@ -337,7 +360,7 @@ function WatchedMovie({ movie }) {
         </p>
         <p>
           <span>⏳</span>
-          <span>{movie.runtime} min</span>
+          <span>{movie.Runtime} min</span>
         </p>
       </div>
     </li>

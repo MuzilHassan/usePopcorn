@@ -53,7 +53,7 @@ body {
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  cursor: grab;
+  cursor: pointer;
 }
 webkit-scrollbar,
 .box::-webkit-scrollbar {
