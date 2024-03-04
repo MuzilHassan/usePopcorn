@@ -133,6 +133,8 @@ export default function App() {
       controller.abort();
     };
   }, [query]);
+
+  useEffect(() => {}, []);
   return (
     <>
       <Nav>

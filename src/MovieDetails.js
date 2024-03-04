@@ -29,6 +29,19 @@ export function MovieDetails({ id, handleClose, addToWatchd }) {
       document.title = "Use Popcorn";
     };
   }, [details.Title]);
+
+  useEffect(() => {
+    const callBack = (e) => {
+      if (e.key == "Escape") {
+        handleClose();
+      }
+    };
+    document.addEventListener("keydown", callBack);
+
+    return () => {
+      document.removeEventListener("keydown", callBack);
+    };
+  }, [handleClose]);
   return (
     <div className="details">
       {isLoading ? (
