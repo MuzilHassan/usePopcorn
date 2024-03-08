@@ -25,7 +25,7 @@ function WatchedBox() {
 */
 export function Summary({ watched }) {
   const avgImdbRating = average(
-    watched.map((movie) => movie.imdbRating)
+    watched?.map((movie) => movie.imdbRating)
   ).toFixed(1);
   //console.log(watched);
   const avgUserRating = average(
