@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 import { KEY } from "./App";
 import { Loader } from "./Loader";
+import { useKey } from "./useKey";
 
 export function MovieDetails({ id, handleClose, addToWatchd }) {
   const [details, setDetails] = useState({});
@@ -30,18 +31,7 @@ export function MovieDetails({ id, handleClose, addToWatchd }) {
     };
   }, [details.Title]);
 
-  useEffect(() => {
-    const callBack = (e) => {
-      if (e.key == "Escape") {
-        handleClose();
-      }
-    };
-    document.addEventListener("keydown", callBack);
-
-    return () => {
-      document.removeEventListener("keydown", callBack);
-    };
-  }, [handleClose]);
+  useKey("Escape", handleClose);
   return (
     <div className="details">
       {isLoading ? (
